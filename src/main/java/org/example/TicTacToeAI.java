@@ -25,14 +25,40 @@ public class TicTacToeAI {
     }
 
     private static int[] findWinningMove(char[][] board, char marker) {
+        // Step 1: Check if the opponent (O) is about to win and block it
         for (int i = 0; i < 3; i++) {
-            if (checkRow(board, i, marker)) return new int[]{i, getEmptyIndex(board[i])};
-            if (checkColumn(board, i, marker)) return new int[]{getEmptyIndex(getColumn(board, i)), i};
+            // First, check if there's a potential win in the row
+            if (checkRow(board, i, marker)) {
+                System.out.println("Blocking win at row: " + i);
+                return new int[]{i, getEmptyIndex(board[i])}; // Block the win in the row
+            }
+            // Then check if there's a potential win in the column
+            if (checkColumn(board, i, marker)) {
+                System.out.println("Blocking win at column: " + i);
+                return new int[]{getEmptyIndex(getColumn(board, i)), i}; // Block the win in the column
+            }
         }
-        if (checkMainDiagonal(board, marker)) return new int[]{getEmptyIndex(getMainDiagonal(board)), getEmptyIndex(getMainDiagonal(board))};
-        if (checkAntiDiagonal(board, marker)) return new int[]{getEmptyIndex(getAntiDiagonal(board)), 2 - getEmptyIndex(getAntiDiagonal(board))};
-        return null;
+
+        // Step 2: Check diagonals for a potential win
+        if (checkMainDiagonal(board, marker)) {
+            System.out.println("Blocking win on main diagonal.");
+            int emptyIndex = getEmptyIndex(getMainDiagonal(board));
+            return new int[]{emptyIndex, emptyIndex}; // Block the win on the main diagonal
+        }
+        if (checkAntiDiagonal(board, marker)) {
+            System.out.println("Blocking win on anti-diagonal.");
+            int emptyIndex = getEmptyIndex(getAntiDiagonal(board));
+            return new int[]{emptyIndex, 2 - emptyIndex}; // Block the win on the anti-diagonal
+        }
+
+        return null; // No winning move found
     }
+
+
+
+
+
+
 
     private static int[] getAvailableCorner(char[][] board) {
         int[][] corners = {{0, 0}, {0, 2}, {2, 0}, {2, 2}};
